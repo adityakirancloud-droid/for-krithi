@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Krithi 💖</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+body{overflow:hidden;background:linear-gradient(135deg,#ffd1dc,#ffe6f0);}
+canvas{position:fixed;top:0;left:0;pointer-events:none;z-index:0;}
+
+.page{
+  width:100vw;height:100vh;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  position:absolute;
+  z-index:1;
+}
+.active{display:flex;}
+
+.card{
+  background:rgba(255,255,255,0.93);
+  padding:40px;
+  border-radius:25px;
+  text-align:center;
+  width:90%;
+  max-width:520px;
+  box-shadow:0 0 35px rgba(255,105,180,.45);
+}
+
+h1{color:#ff4d88;margin-bottom:20px;}
+p{margin:12px 0;}
+
+button{
+  padding:12px 26px;
+  border:none;
+  border-radius:30px;
+  font-size:18px;
+  cursor:pointer;
+  margin:10px;
+}
+
+.yes{background:#ff4d88;color:white;}
+.no{background:#ffc0cb;}
+
+.flowers{
+  position:absolute;
+  inset:0;
+  background:url("");
+  opacity:.12;
+  z-index:0;
+}
+
+.heart{
+  position:absolute;
+  font-size:20px;
+  animation:floatUp 4s linear infinite;
+}
+@keyframes floatUp{
+  from{transform:translateY(100vh);opacity:1;}
+  to{transform:translateY(-10vh);opacity:0;}
+}
+
+.cursor-heart{
+  position:fixed;
+  pointer-events:none;
+  animation:fadeOut 1s forwards;
+}
+@keyframes fadeOut{
+  to{opacity:0;transform:scale(2);}
+}
+
+.gifts{display:flex;gap:20px;justify-content:center;}
+.gift{
+  background:#ffe6f0;
+  padding:20px;
+  border-radius:18px;
+  cursor:pointer;
+  width:130px;
+  box-shadow:0 0 15px rgba(255,105,180,.3);
+}
+
+.quiz-btn{
+  display:block;
+  width:100%;
+  margin:8px 0;
+}
+
+.feedback{font-weight:bold;}
+
+.hidden {
+  opacity: 0;
+}
+
+.fade-in {
+  animation: fadeIn 1.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.lip {
+  width: 30px;       /* adjust size */
+  margin-top: 20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+<div class="flowers"></div>
+
+<audio autoplay loop>
+  <source src="https://cdn.pixabay.com/audio/2023/02/14/audio_9f0d7e0fbb.mp3">
+</audio>
+
+<!-- PAGE 1 -->
+<div class="page active" id="valentine">
+  <div class="card">
+    <h1>Will you be my Valentine, Krithi Bangaru? 💖</h1>
+    <button class="yes" onclick="yesClicked()">Yes 💘</button>
+    <button class="no" id="noBtn">No 🙈</button>
+  </div>
+</div>
+
+<!-- YES PAGE -->
+<div class="page" id="yesPage">
+  <div class="card">
+    <h1>Good choice Sweetheart ❤️</h1>
+    <p> Yayyyyyyy!!!!! Thanks for saying Yes Sweetheart! You have selected a perfect person in your life babeuu!! From now on your life will be completely filled with lot and lot of love, happiness, care, respect, priority and everything you deserve in your life my baby girl!</p> 
+         <p>- With Love, Charm 💘</p>
+    <button onclick="showPage('passwordPage')">See your gifts ➜</button>
+  </div>
+</div>
+
+<!-- PASSWORD PAGE -->
+<div class="page" id="passwordPage">
+  <div class="card">
+    <h1>Can you unlock baby🔐??</h1>
+    <p>Think regarding the secret key sweetheart... 💕</p>
+
+    <input 
+      type="password" 
+      id="giftPassword" 
+      placeholder="Enter the secret key here honey 💖"
+      style="
+        padding:12px;
+        width:80%;
+        border-radius:20px;
+        border:1px solid #ff99bb;
+        text-align:center;
+        font-size:16px;
+        margin:15px 0;
+      "
+    >
+
+    <p id="passMsg" style="color:#ff4d88;"></p>
+
+    <button onclick="checkPassword()">Unlock Gifts 🔓</button>
+  </div>
+</div>
+
+<!-- GIFTS -->
+<div class="page" id="giftsPage">
+  <div class="card">
+    <h1>Something for you Baby Girl 🎁</h1>
+    <div class="gifts">
+      <div class="gift" onclick="startQuiz()">Gift 1</div>
+      <div class="gift" onclick="showPage('letterPage')">Gift 2</div>
+      <div class="gift" onclick="showPage('gift3Page')">Gift 3</div>
+    </div>
+    <button id="finalBtn" onclick="showPage('lovePage')" style="display:none;">
+      One last thing ❤️
+    </button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="page" id="quizPage">
+  <div class="card">
+    <h1>Solve if you can Honey💕</h1>
+    <p id="question"></p>
+    <div id="options"></div>
+    <div class="feedback" id="feedback"></div>
+  </div>
+</div>
+
+<!-- LETTER -->
+<div class="page" id="letterPage">
+  <div class="card">
+    <h1>A Letter 💌</h1>
+   <p>Loving you is the best decision i took in my life nanna.
+In a world that keeps moving too fast, you are the place where my heart rests. When I think of you, everything feels softer, calmer, and more meaningful. You don’t just make me happy you make me feel complete.
+You see me in ways no one else ever has. You understand my silence, you tolerate my flaws, and you stay even when I’m not at my best. That means more to me than you’ll ever know. With you, I don’t have to pretend or hide I can just be me, and that is the most beautiful feeling. <br>
+If love had a name, it would sound like yours.<br>
+And if forever exists, I want it to start with you. <br> I will change for you nanna! I will be the best and perfect! Just catch my hand and be sweetheart! We can fight against the world and get married bangaram! I will never let you down nanna!</p>
+  <p style="text-align:center;margin-top:20px;">
+    I love you sooo much ❤️💋<br>
+  </p>
+
+  <p style="text-align:right;margin-top:25px;color:#ff4d88;font-style:italic;">
+    - Yours forever,<br>
+    <b>Aditya 💘</b>
+  </p>
+    <button onclick="showPage('giftsPage')">Back</button>
+  </div>
+</div>
+
+<!-- GIFT 3 -->
+<div class="page" id="gift3Page">
+  <div class="card">
+    <h1>Our Memory 📸</h1>
+    <img src="US.jpeg" style="width:100%;border-radius:15px;">
+    <p>Each day with you feels like a new memory, a new chapter filled with happiness, tears, and even fights but in the end, we always choose each other. No matter how many times we argued, we sat together, talked it out with love and reassurance. One thing I know for sure, nanna <b>“Loving you was the best decision of my life.”</b>
+        </b>I miss you so much and love you endlessly, my cute little princess, my bujji bangaram, naa chitti thandri. MUAHHHH </b>💕</p>
+    <button onclick="showPage('giftsPage')">Back</button>
+  </div>
+</div>
+
+<!-- LOVE PAGE -->
+<div class="page" id="lovePage">
+  <div class="card">
+    <h1 id="loveTitle"></h1>
+    <p id="loveLine1"></p>
+    <p id="loveLine2"></p>
+    <p id="loveSign" style="margin-top:25px;font-style:italic;color:#ff4d88;"></p>
+    <img src="lip.png" id="lip" class="lip hidden">
+
+  </div>
+</div>
+
+<script>
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+
+  if(id==='letterPage') gift2Done=true;
+  if(id==='gift3Page') gift3Done=true;
+  if(id==='lovePage') startLoveSequence();
+
+  checkAllGifts();
+}
+
+/* NO BUTTON */
+const noBtn=document.getElementById("noBtn");
+noBtn.onmouseover=()=>{
+  noBtn.style.position="absolute";
+  noBtn.style.left=Math.random()*80+"%";
+  noBtn.style.top=Math.random()*80+"%";
+};
+
+/* HEARTS */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="❤️";
+  h.style.left=Math.random()*100+"vw";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),4000);
+},500);
+
+document.addEventListener("mousemove",e=>{
+  const h=document.createElement("div");
+  h.className="cursor-heart";
+  h.innerHTML="💗";
+  h.style.left=e.clientX+"px";
+  h.style.top=e.clientY+"px";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),1000);
+});
+
+/* FIREWORKS */
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;canvas.height=innerHeight;
+let particles=[];
+function firework(){
+  for(let i=0;i<100;i++){
+    particles.push({
+      x:innerWidth/2,y:innerHeight/2,
+      dx:(Math.random()-.5)*8,
+      dy:(Math.random()-.5)*8,
+      life:100
+    });
+  }
+}
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach((p,i)=>{
+    p.x+=p.dx;p.y+=p.dy;p.life--;
+    ctx.fillStyle="pink";
+    ctx.fillRect(p.x,p.y,4,4);
+    if(p.life<=0)particles.splice(i,1);
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* YES */
+function yesClicked(){
+  showPage('yesPage');
+  firework();
+}
+
+const CORRECT_PASSWORD = "forever"; 
+// 🔁 Change this to anything meaningful (date, nickname, etc.)
+
+function checkPassword(){
+  const input = document.getElementById("giftPassword").value;
+  const msg = document.getElementById("passMsg");
+
+  if(input === CORRECT_PASSWORD){
+    msg.innerText = "Unlocked for my love ❤️";
+    setTimeout(()=>{
+      showPage('giftsPage');
+    },800);
+  } else {
+    msg.innerText = "Hmm… try again, bangaram 😘";
+  }
+}
+
+/* QUIZ */
+const quiz=[
+ {q:"Who loves you the most?",options:["Aditya 😌","Someone else","Universe"],correct:0},
+ {q:"Our vibe?",options:["Two Babies 🍼💞","Soulmates 💕","Lovers ♾️❤️","All of the above 😌"],correct:3},
+ {q:"Forever means?",options:["Until we get bored 😴","For this lifetime only ⏳","Every lifetime with you ♾️❤️"],correct:2},
+ {q:"What Aditya loves the most in you?",options:["Bujji Mukku😌","Bujji Moothi🍼","Bujji kallu❤️"],correct:1}
+];
+
+let current=0, gift1Done=false, gift2Done=false, gift3Done=false;
+
+function startQuiz(){
+  current=0;
+  showPage('quizPage');
+  loadQuestion();
+}
+function loadQuestion(){
+  feedback.innerText="";
+  question.innerText=quiz[current].q;
+  options.innerHTML="";
+  quiz[current].options.forEach((o,i)=>{
+    const b=document.createElement("button");
+    b.className="quiz-btn";
+    b.innerText=o;
+    b.onclick=()=>checkAnswer(i);
+    options.appendChild(b);
+  });
+}
+function checkAnswer(i){
+  if(i===quiz[current].correct){
+    feedback.innerText="Wowww you’re smart sweetheart 😘💖";
+    current++;
+    if(current<quiz.length)setTimeout(loadQuestion,1200);
+    else{
+      gift1Done=true;
+      setTimeout(()=>showPage('giftsPage'),1500);
+    }
+  }else{
+    feedback.innerText="Try again bangaram 😌💗";
+  }
+}
+
+/* FINAL BUTTON */
+function checkAllGifts(){
+  if(gift1Done && gift2Done && gift3Done)
+    document.getElementById("finalBtn").style.display="inline-block";
+}
+
+/* LOVE SEQUENCE */
+function startLoveSequence() {
+  loveTitle.innerHTML = "";
+  loveLine1.innerHTML = "";
+  loveLine2.innerHTML = "";
+  loveSign.innerHTML = "";
+
+  const lip = document.getElementById("lip");
+  lip.classList.add("hidden");
+
+  firework();
+  setInterval(firework, 1800);
+
+  setTimeout(() => {
+    loveTitle.innerHTML = "I love you Nanna ❤️";
+    loveTitle.classList.add("fade-in");
+  }, 500);
+
+  setTimeout(() => {
+    loveLine1.innerHTML = "Every second, minute, and hour.<br>Every day and night.";
+    loveLine1.classList.add("fade-in");
+  }, 2500);
+
+  setTimeout(() => {
+    loveLine2.innerHTML =
+      "Every morning, afternoon, and evening.<br>In every season - even if the world turns against us I choose you always nanna..";
+    loveLine2.classList.add("fade-in");
+  }, 4500);
+
+  setTimeout(() => {
+    loveSign.innerHTML = "- With lot of love Aditya Kiran Varanasi";
+    loveSign.classList.add("fade-in");
+  }, 6500);
+
+  // 💋 Lip appears last
+  setTimeout(() => {
+    lip.classList.remove("hidden");
+    lip.classList.add("fade-in");
+  }, 7000);
+}
+
+</script>
+
+</body>
+</html>
